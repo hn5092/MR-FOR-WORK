@@ -18,6 +18,8 @@ import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.io.SequenceFile.Metadata;
+import org.apache.hadoop.mapred.MultiFileInputFormat;
+import org.apache.hadoop.mapred.lib.MultipleInputs;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.Mapper;
 import org.apache.hadoop.mapreduce.Reducer;
@@ -25,13 +27,13 @@ import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.util.bloom.CountingBloomFilter;
 
-public class MR {
+public class OOPForMR {
 
 	public static void main(String[] args) throws IOException,
 			ClassNotFoundException, InterruptedException {
 		Configuration conf = new Configuration();
 		Job job = Job.getInstance(conf);
-		job.setJarByClass(MR.class);
+		job.setJarByClass(OOPForMR.class);
 
 		job.setMapperClass(StepMapper.class);
 		job.setMapOutputKeyClass(Text.class);
@@ -46,13 +48,12 @@ public class MR {
 		if (result == 0) {
 			Configuration conf2 = new Configuration();
 			Job job2 = Job.getInstance(conf2);
-			job2.setJarByClass(MR.class);
-
+			job2.setJarByClass(OOPForMR.class);
+//			MultipleInputs.addInputPath(conf, path, inputFormatClass, mapperClass);
 			job2.setMapperClass(StepMapper2.class);
 			job2.setMapOutputKeyClass(LongWritable.class);
-			job2.setMapOutputValueClass(Text.class);
+			job2.setMapOutputValueClass(UserInfo2.class);
 			FileInputFormat.setInputPaths(job2, new Path(args[1]));
-
 			job2.setReducerClass(StepReducer2.class);
 			job2.setOutputKeyClass(Text.class);
 			job2.setOutputValueClass(NullWritable.class);
@@ -67,41 +68,31 @@ public class MR {
 		public static final String COUNT = "auto";
 		Text k2 = new Text();
 		LongWritable v2 = new LongWritable();
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-		Map<String, String> Metadata = new HashMap<String, String>();
-
+		UserInfo userInfo = null;
 		@Override
 		protected void map(LongWritable key, Text value, Context context)
 				throws IOException, InterruptedException {
-			Map<String, String> info = parseData(value.toString());
 			try {
-				Date d = sdf.parse(info.get("TIME"));
-				k2.set(info.get("ID"));
-				v2.set(d.getTime());
+				userInfo = UserInfo.getInstance(value.toString());
+				k2.set(userInfo.getUSERID());
+				v2.set(userInfo.getDate());
 				context.write(k2, v2);
-			} catch (ParseException e) {
-				e.printStackTrace();
+			} catch (ParseException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
 			}
 
 		}
 
-		private Map<String, String> parseData(String value) {
-			Metadata.clear();
-			String[] data = value.split("\t");
-			Metadata.put("ID", data[0]);
-			Metadata.put("TIME", data[1]);
-			return Metadata;
-		}
 
 		@Override
 		protected void cleanup(
 				Mapper<LongWritable, Text, Text, LongWritable>.Context context)
 				throws IOException, InterruptedException {
 			// TODO Auto-generated method stub
-			Metadata.clear();
-			sdf = null;
 			k2 = null;
 			v2 = null;
+			userInfo = null;
 		}
 	}
 
@@ -125,7 +116,7 @@ public class MR {
 			String frist = sdf.format(new Date(t.get(0)));
 			String last = sdf.format(new Date(t.get(t.size() - 1)));
 			String count = t.size() + "";
-			k3.set(k2.toString() + " " + frist + " " + last + " " + count);
+			k3.set(k2.toString() + "|" + frist + "|" + last + "|" + count);
 			context.write(k3, NullWritable.get());
 		}
 
@@ -140,37 +131,40 @@ public class MR {
 	}
 
 	public static class StepMapper2 extends
-			Mapper<LongWritable, Text, LongWritable, Text> {
-		Map<String, String> Metadata = new HashMap<String, String>();
+			Mapper<LongWritable, Text, LongWritable, UserInfo2> {
 		LongWritable i = new LongWritable();
-
+		UserInfo2 u = null;
 		@Override
 		protected void map(LongWritable key, Text value, Context context)
 				throws IOException, InterruptedException {
-			i.set(-Long.parseLong(value.toString().split(" ")[5]));
-			context.write(i, value);
+			try {
+				u = UserInfo2.getInstance(value.toString());
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			i.set(-u.getTimes());
+			context.write(i, u);
 		}
 
 		@Override
 		protected void cleanup(
-				Mapper<LongWritable, Text, LongWritable, Text>.Context context)
+				Mapper<LongWritable, Text, LongWritable, UserInfo2>.Context context)
 				throws IOException, InterruptedException {
 			i = null;
 		}
 	}
 
 	public static class StepReducer2 extends
-			Reducer<LongWritable, Text, Text, NullWritable> {
+			Reducer<LongWritable, UserInfo2, Text, NullWritable> {
 		private Text k3 = new Text();
 
-		protected void reduce(LongWritable k2, Iterable<Text> v2,
-				Reducer<LongWritable, Text, Text, NullWritable>.Context context)
+		protected void reduce(LongWritable k2, Iterable<UserInfo2> v2,
+				Reducer<LongWritable, UserInfo2, Text, NullWritable>.Context context)
 				throws IOException, InterruptedException {
 			String data = "";
-			context.getCounter("hah", "go").increment(1);
-			for (Text t : v2) {
-				data +=k2.toString()+ " "+ t.toString()
-						.substring(0, t.toString().lastIndexOf(" ")) + "\n";
+			for (UserInfo2 u : v2) {
+				data +=  u.toString() + "\n";
 			}
 			data = data.substring(0, data.lastIndexOf("\n"));
 			k3.set(data);
