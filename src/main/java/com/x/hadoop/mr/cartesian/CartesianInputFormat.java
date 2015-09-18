@@ -2,12 +2,13 @@ package com.x.hadoop.mr.cartesian;
 
 import java.io.IOException;
 
-import org.apache.hadoop.mapred.FileInputFormat;
 import org.apache.hadoop.mapred.InputSplit;
 import org.apache.hadoop.mapred.JobConf;
-import org.apache.hadoop.mapred.RecordReader;
 import org.apache.hadoop.mapred.Reporter;
 import org.apache.hadoop.mapred.join.CompositeInputSplit;
+import org.apache.hadoop.mapreduce.RecordReader;
+import org.apache.hadoop.mapreduce.TaskAttemptContext;
+import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.util.ReflectionUtils;
 
 public class CartesianInputFormat extends FileInputFormat {
@@ -27,13 +28,17 @@ public class CartesianInputFormat extends FileInputFormat {
 		job.set(RIGHT_INPUT_FORMAT, inputFormat.getCanonicalName());
 		job.set(RIGHT_INPUT_PATH, inputPath);
 	}
-	@Override
 	public RecordReader getRecordReader(InputSplit split, JobConf conf,
 			Reporter reporter) throws IOException {
-		return new CartesianRecordReader((CompositeInputSplit) split, conf,
-				reporter);
+		try {
+			return new CartesianRecordReader((CompositeInputSplit) split, conf,
+					reporter);
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
 	}
-	@Override
 	public InputSplit[] getSplits(JobConf conf, int numSplits)
 			throws IOException{
 		//get the input split from both the left and right data sets
@@ -63,7 +68,7 @@ public class CartesianInputFormat extends FileInputFormat {
 				i++;
 			}
 		}
-		return null;
+		return coSplits;
 		
 	}
 	private InputSplit[] getInputSplits(JobConf conf, String inputFormatClass,
@@ -73,5 +78,14 @@ public class CartesianInputFormat extends FileInputFormat {
 		
 		return inputFormat.getSplits(conf, numSplits);
 	}
+	@Override
+	public RecordReader createRecordReader(
+			org.apache.hadoop.mapreduce.InputSplit split,
+			TaskAttemptContext context) throws IOException,
+			InterruptedException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
 
 }

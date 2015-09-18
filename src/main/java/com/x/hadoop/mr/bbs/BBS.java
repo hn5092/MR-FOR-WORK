@@ -1,6 +1,7 @@
 package com.x.hadoop.mr.bbs;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
@@ -28,14 +29,26 @@ public class BBS {
 				TextInputFormat.class, Step2Mapper.class);
 		job.setMapOutputKeyClass(Text.class);
 		job.setMapOutputValueClass(Text.class);
-
+		
 		job.setReducerClass(StepReducer.class);
-		job.setOutputKeyClass(Text.class);
+		job.setOutputKeyClass(GBKOutputFormat.class);
 		job.setOutputValueClass(NullWritable.class);
+		//设置GBK 模式的
+		job.setOutputFormatClass(GBKOutputFormat.class);
 		FileOutputFormat.setOutputPath(job, new Path(args[2]));
 		job.waitForCompletion(true);
+		job.getCounters().findCounter("1","1").getValue();
 
 	}
+	public static String transformTextToUTF8(Text text, String encoding) {
+		String value = null;
+		try {
+		value = new String(text.getBytes(), 0, text.getLength(), encoding);
+		} catch (UnsupportedEncodingException e) {
+		e.printStackTrace();
+		}
+		return value;
+		}
 
 	public static class StepMapper extends
 			Mapper<LongWritable, Text, Text, Text> {
@@ -47,7 +60,8 @@ public class BBS {
 		// 1 103:2.5,101:5.0,102:3.0
 		protected void map(LongWritable key, Text value, Context context)
 				throws IOException, InterruptedException {
-			p = PostInfo.getInstance(value.toString());
+			p = PostInfo.getInstance(transformTextToUTF8(value,"GBK"));
+//			p = PostInfo.getInstance(value.toString());
 			k2.set(p.getId());
 			v2.set(p.toString());
 			context.write(k2, v2);
@@ -67,7 +81,8 @@ public class BBS {
 		// 1 103:2.5,101:5.0,102:3.0
 		protected void map(LongWritable key, Text value, Context context)
 				throws IOException, InterruptedException {
-			b = BaseInfo.getInstance(value.toString());
+			b = BaseInfo.getInstance(transformTextToUTF8(value,"GBK"));
+//			b = BaseInfo.getInstance(value.toString());
 			k2.set(b.getId());
 			v2.set(b.toString());
 			context.write(k2, v2);
@@ -100,6 +115,7 @@ public class BBS {
 			for (Text t : v2) {
 				String temp = t.toString();
 				if (temp.startsWith("B")) {
+					// 
 					data = k2.toString()+ "|"+temp.substring(1, temp.length())+ "|" + id;
 					v3.set(data);
 					context.write(v3, NullWritable.get());

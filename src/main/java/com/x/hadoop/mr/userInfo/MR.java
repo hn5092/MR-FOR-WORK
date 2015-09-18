@@ -18,12 +18,21 @@ import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.io.SequenceFile.Metadata;
+import org.apache.hadoop.mapred.lib.ChainMapper;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.Mapper;
 import org.apache.hadoop.mapreduce.Reducer;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.util.bloom.CountingBloomFilter;
+/**
+ * 通过 登陆时间和用户ID 分析出 第一次登陆时间和最后一次登陆时间,登陆次数
+ * 计算出信息之后再根据登陆次数排序
+ * step 1. 70	2015-05-16 07:47:24-->0|2014-10-09 00:30:35|2015-07-12 10:50:59|9
+ * step 2. 0|2014-10-09 00:30:35|2015-07-12 10:50:59|9 -->333|2014-09-23 09:50:56|2015-09-04 03:27:20|21
+ * @author imad
+ *
+ */
 
 public class MR {
 
@@ -37,7 +46,7 @@ public class MR {
 		job.setMapOutputKeyClass(Text.class);
 		job.setMapOutputValueClass(LongWritable.class);
 		FileInputFormat.setInputPaths(job, new Path(args[0]));
-
+//	ChainMapper.addMapper(job, klass, inputKeyClass, inputValueClass, outputKeyClass, outputValueClass, byValue, mapperConf);
 		job.setReducerClass(StepReducer.class);
 		job.setOutputKeyClass(Text.class);
 		job.setOutputValueClass(NullWritable.class);
