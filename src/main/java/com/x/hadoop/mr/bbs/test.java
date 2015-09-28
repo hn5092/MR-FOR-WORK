@@ -9,5 +9,10 @@ public class test {
 		String[] data = value.split("\t");
 		System.out.println(data);
 		new BigDecimal(1.1);
+		while(true){
+			for(int i = 0 ; i <1111111111111111111L;i ++ ){
+				int e=222222;
+			}
+		}
 	}
 }
