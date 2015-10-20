@@ -56,6 +56,7 @@ public class MR {
 			conf.set("hbase.zookeeper.quorum",
 					"xym04:2181,xym05:2181,xym02:2181");
 			table = new HTable(conf, "auto");
+			table.setAutoFlushTo(false);
 		}
 
 		public static final String COUNT = "auto";
@@ -82,6 +83,9 @@ public class MR {
 						Bytes.toBytes(b.getFromURL()));
 				table.put(put);
 				count++;
+				if (count % 100000 == 0){
+					table.flushCommits();
+				}
 				context.write(NullWritable.get(), NullWritable.get());
 			}
 		}
@@ -89,9 +93,10 @@ public class MR {
 		protected void cleanup(
 				Mapper<LongWritable, Text, NullWritable, NullWritable>.Context context)
 					throws IOException, InterruptedException {
+			table.flushCommits();
 			table.close();
 		}
-
+		
 	}
 
 }
