@@ -140,6 +140,7 @@ public class SortMR {
 				LongWritable l = value.next();
 				t.add(Long.parseLong(l.toString()));
 			}
+			
 			t.sort(null);
 			String frist = sdf.format(new Date(t.get(0)));
 			String last = sdf.format(new Date(t.get(t.size() - 1)));

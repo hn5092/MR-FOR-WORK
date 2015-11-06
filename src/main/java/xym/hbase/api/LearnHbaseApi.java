@@ -38,6 +38,7 @@ public class LearnHbaseApi {
 	private static final byte[] URL = Bytes.toBytes("URL");
 	private static final byte[] ROW1 = Bytes.toBytes("1111");
 	private static final byte[] ROW2 = Bytes.toBytes("2222");
+	private static final byte[] SCREEN = Bytes.toBytes("screen");
 
 	Configuration conf;
 	HTable table;
@@ -45,7 +46,7 @@ public class LearnHbaseApi {
 	public void setup(){
 		Configuration conf = HBaseConfiguration.create();
 		conf.set("hbase.zookeeper.quorum",
-				"xym04:2181,xym05:2181,xym02:2181");
+				"xym01:2181,xym02:2181,xym03:2181");
 		try {
 			table = new HTable(conf, "auto");
 		} catch (IOException e) {
@@ -75,8 +76,11 @@ public class LearnHbaseApi {
 			System.out.println(Bytes.toString(value3));
 			Cell[] rawCells = res.rawCells(); //返回所有信息
 			for(Cell c : rawCells){
+				System.out.println("this is  cell");
+				System.out.println(new String(CellUtil.cloneRow(c)));
 				System.out.println(new String(c.getValueArray(), "UTF-8"));
 			}
+			
 			List<Cell> columnCells = res.getColumnCells(Bytes.toBytes("info"), Bytes.toBytes("ip"));
 			for(Cell c : columnCells){
 				
@@ -104,11 +108,11 @@ public class LearnHbaseApi {
 		p1.add(INFO, URL, Bytes.toBytes("www.xym.com"));
 		List<Row> batch = new ArrayList<Row>();
 		batch.add(p1);
-		Get g = new Get(Bytes.toBytes("xym"));
-		batch.add(g);
-		Get g2 = new Get(Bytes.toBytes("xym"));
-//		g.addFamily(Bytes.toBytes("xym"));  //没有的行就报错
-		batch.add(g2);
+//		Get g = new Get(Bytes.toBytes("xym"));
+//		batch.add(g);
+//		Get g2 = new Get(Bytes.toBytes("xym"));
+////		g.addFamily(Bytes.toBytes("xym"));  //没有的行就报错
+//		batch.add(g2);
 		try {
 			Object[] result = new Object[batch.size()];
 			table.batch(batch,result);
@@ -129,11 +133,12 @@ public class LearnHbaseApi {
 	 */
 	@Test
 	public void testScan(){
-		Scan scan = new Scan(Bytes.toBytes("1000"), Bytes.toBytes("5010"));
+		Scan scan = new Scan(Bytes.toBytes("1000"), Bytes.toBytes("1110"));
 		ResultScanner scanner = null;
 		try {
 			scan.setBatch(2);  //colum 
 			scan.setCaching(10);//rpc times
+//			scan.addColumn(INFO, SCREEN);
 			 scanner = table.getScanner(scan);
 			for(Result r:scanner){
 				System.out.println(r);

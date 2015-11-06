@@ -54,7 +54,7 @@ public class MR {
 				throws IOException, InterruptedException {
 			Configuration conf = HBaseConfiguration.create();
 			conf.set("hbase.zookeeper.quorum",
-					"xym04:2181,xym05:2181,xym02:2181");
+					"xym01:2181,xym02:2181,xym03:2181");
 			table = new HTable(conf, "auto");
 			table.setAutoFlushTo(false);
 		}
