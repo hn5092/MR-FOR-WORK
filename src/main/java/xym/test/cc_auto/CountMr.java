@@ -56,6 +56,7 @@ public class CountMr {
 		@Override
 		protected void map(LongWritable key, Text value, Context context)
 				throws IOException, InterruptedException {
+			System.out.println(Integer.parseInt(key.toString()));
 			context.getCounter(COUNT, "total").increment(1);
 			b = BeanInfo.filterScreen(value.toString());
 			if(b.isValid()){

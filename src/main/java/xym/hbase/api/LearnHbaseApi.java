@@ -71,6 +71,7 @@ public class LearnHbaseApi {
 			byte[] value = res.getValue(Bytes.toBytes("info"), Bytes.toBytes("ip"));
 			System.out.println(Bytes.toString(value));
 			byte[] value2 = res.value();	//返回第一行的
+			System.out.println("111111");
 			System.out.println(Bytes.toString(value2));
 			byte[] value3 = res.getRow();  // 返回行健
 			System.out.println(Bytes.toString(value3));
