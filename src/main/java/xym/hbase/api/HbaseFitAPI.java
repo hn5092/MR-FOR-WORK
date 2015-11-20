@@ -9,13 +9,14 @@ import java.util.Set;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.hbase.Cell;
+import org.apache.hadoop.hbase.CellUtil;
 import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.client.HTable;
 import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.client.ResultScanner;
 import org.apache.hadoop.hbase.client.Scan;
 import org.apache.hadoop.hbase.filter.BinaryComparator;
-import org.apache.hadoop.hbase.filter.CompareFilter;
 import org.apache.hadoop.hbase.filter.CompareFilter.CompareOp;
 import org.apache.hadoop.hbase.filter.FamilyFilter;
 import org.apache.hadoop.hbase.filter.Filter;
@@ -25,19 +26,18 @@ import org.apache.hadoop.hbase.filter.KeyOnlyFilter;
 import org.apache.hadoop.hbase.filter.PageFilter;
 import org.apache.hadoop.hbase.filter.PrefixFilter;
 import org.apache.hadoop.hbase.filter.QualifierFilter;
-import org.apache.hadoop.hbase.filter.RegexStringComparator;
 import org.apache.hadoop.hbase.filter.RowFilter;
-import org.apache.hadoop.hbase.filter.SingleColumnValueExcludeFilter;
 import org.apache.hadoop.hbase.filter.SingleColumnValueFilter;
 import org.apache.hadoop.hbase.filter.SubstringComparator;
-import org.apache.hadoop.hbase.filter.TimestampsFilter;
 import org.apache.hadoop.hbase.filter.ValueFilter;
 import org.apache.hadoop.hbase.util.Bytes;
 import org.junit.Before;
 import org.junit.Test;
 
+import xym.hbase.filter.MyFilter;
+
 public class HbaseFitAPI {
-	private static final Log LOG = LogFactory.getLog(LearnHbaseApi.class);
+	private static final Log LOG = LogFactory.getLog(HbaseFitAPI.class);
 	private static final byte[] INFO = Bytes.toBytes("info");
 	private static final byte[] URL = Bytes.toBytes("URL");
 	private static final byte[] ROW1 = Bytes.toBytes("1111");
@@ -53,7 +53,7 @@ public class HbaseFitAPI {
 		Configuration conf = HBaseConfiguration.create();
 		conf.set("hbase.zookeeper.quorum", "xym01:2181,xym02:2181,xym03:2181");
 		try {
-			scan = new Scan(Bytes.toBytes("1000"), Bytes.toBytes("1100"));
+			scan = new Scan(Bytes.toBytes("163874"), Bytes.toBytes("164874"));
 			table = new HTable(conf, "auto");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -253,13 +253,25 @@ public class HbaseFitAPI {
 		getres();
 	}
 	
+	@Test
+	public void testMyfilter(){
+		scan.addColumn(INFO, SCREEN);
+		Filter myFilter = new MyFilter();
+		scan.setFilter(myFilter);
+		getres();
+	}
 	
 	
 	public void getres() {
 		try {
+			
 			ResultScanner scanner = table.getScanner(scan);
 			for (Result res : scanner) {
 				System.out.println(res);
+				Cell[] rawCells = res.rawCells();
+				for(Cell c : rawCells){
+					System.out.println(new String(CellUtil.cloneValue(c)));
+				}
 			}
 			scanner.close();
 		} catch (IOException e) {

@@ -48,7 +48,7 @@ public class HbaseDDL {
 		try {
 			HBaseAdmin ha = new HBaseAdmin(conf);
 			HTableDescriptor htd = new HTableDescriptor(
-					TableName.valueOf("people"));
+					TableName.valueOf("test"));
 			HColumnDescriptor hcDescriptor = new HColumnDescriptor("info");
 			HColumnDescriptor hcDescriptor2 = new HColumnDescriptor("data");
 			hcDescriptor.setMaxVersions(3);
@@ -84,7 +84,7 @@ public class HbaseDDL {
 			hcDescriptor.setMaxVersions(3);
 			htd.addFamily(hcDescriptor);
 			htd.addFamily(hcDescriptor2);
-			ha.createTable(htd, Bytes.toBytes(1L), Bytes.toBytes(100l), 10);
+			ha.createTable(htd, Bytes.toBytes(1L), Bytes.toBytes(100000l),5);
 			ha.close();
 			printRegions(tableName);
 		} catch (MasterNotRunningException e) {

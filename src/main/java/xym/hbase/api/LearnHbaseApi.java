@@ -4,9 +4,6 @@ import java.io.IOException;
 import java.io.InterruptedIOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NavigableMap;
-
-import javax.swing.text.TabExpander;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -15,7 +12,6 @@ import org.apache.hadoop.hbase.Cell;
 import org.apache.hadoop.hbase.CellUtil;
 import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.HTableDescriptor;
-import org.apache.hadoop.hbase.client.Delete;
 import org.apache.hadoop.hbase.client.Get;
 import org.apache.hadoop.hbase.client.HTable;
 import org.apache.hadoop.hbase.client.Put;
@@ -142,7 +138,10 @@ public class LearnHbaseApi {
 //			scan.addColumn(INFO, SCREEN);
 			 scanner = table.getScanner(scan);
 			for(Result r:scanner){
-				System.out.println(r);
+			Cell[] rawCells = r.rawCells();
+			for(Cell c : rawCells){
+				System.out.println(new String(CellUtil.cloneValue(c)));
+			}
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

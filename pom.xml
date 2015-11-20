@@ -2,8 +2,8 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>cn.itcast.hadoop.mr</groupId>
-	<artifactId>datacount</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<artifactId>mr</artifactId>
+	<version>1</version>
 
 	<dependencies>
 
@@ -61,6 +61,12 @@
 			<version>0.96.2-hadoop2</version> </dependency> <dependency> <groupId>org.apache.hadoop</groupId> 
 			<artifactId>hadoop-mapreduce-client-hs</artifactId> <version>2.2.0</version> 
 			</dependency> -->
+		<dependency>
+			<groupId>com.google.protobuf</groupId>
+			<artifactId>protobuf-java</artifactId>
+			<version>2.5.0</version>
+			<scope>compile</scope>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>
@@ -69,7 +75,7 @@
 				<configuration>
 					<archive>
 						<manifest>
-							<mainClass>xym.hbase.cc_auto.MR</mainClass>
+							<mainClass>xym.hbase.MRForHbase</mainClass>
 						</manifest>
 					</archive>
 					<descriptorRefs>
