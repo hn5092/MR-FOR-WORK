@@ -17,7 +17,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class Admin {
-	private static final Log LOG = LogFactory.getLog(LearnHbaseApi.class);
+	private static final Log LOG = LogFactory.getLog(Admin.class);
 	private static final byte[] INFO = Bytes.toBytes("info");
 	private static final byte[] URL = Bytes.toBytes("URL");
 	private static final byte[] HINT1 = Bytes.toBytes("hint1");
@@ -38,13 +38,10 @@ public class Admin {
 		try {
 			 admin = new HBaseAdmin(conf);
 		} catch (MasterNotRunningException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (ZooKeeperConnectionException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -55,10 +52,8 @@ public class Admin {
 			admin.compact("test1");
 			System.out.println(clusterStatus.toString());
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

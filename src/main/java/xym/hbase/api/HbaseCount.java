@@ -19,7 +19,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class HbaseCount {
-	private static final Log LOG = LogFactory.getLog(LearnHbaseApi.class);
+	private static final Log LOG = LogFactory.getLog(HbaseCount.class);
 	private static final byte[] INFO = Bytes.toBytes("info");
 	private static final byte[] URL = Bytes.toBytes("URL");
 	private static final byte[] HINT1 = Bytes.toBytes("hint1");

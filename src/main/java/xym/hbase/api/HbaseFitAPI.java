@@ -34,8 +34,6 @@ import org.apache.hadoop.hbase.util.Bytes;
 import org.junit.Before;
 import org.junit.Test;
 
-import xym.hbase.filter.MyFilter;
-
 public class HbaseFitAPI {
 	private static final Log LOG = LogFactory.getLog(HbaseFitAPI.class);
 	private static final byte[] INFO = Bytes.toBytes("info");
@@ -254,9 +252,9 @@ public class HbaseFitAPI {
 	}
 	
 	@Test
-	public void testMyfilter(){
-		scan.addColumn(INFO, SCREEN);
-		Filter myFilter = new MyFilter();
+	public void testMyFilter(){
+//		scan.addColumn(INFO, SCREEN);
+		Filter myFilter = new org.apache.hadoop.hbase.filter.MyFilter();
 		scan.setFilter(myFilter);
 		getres();
 	}

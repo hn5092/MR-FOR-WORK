@@ -98,7 +98,20 @@ public class LearnHbaseApi {
 			e.printStackTrace();
 		}
 	}
-	
+	@Test
+	public void testGet(){
+		Get get = new Get(Bytes.toBytes("100"));
+		Result result;
+		try {
+			result = table.get(get);
+			for(Cell c:result.rawCells()){
+				System.out.println(new String(CellUtil.cloneValue(c)));
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	@Test
 	public void batch(){
 		Put p1 = new Put(Bytes.toBytes("xym"));
@@ -130,7 +143,7 @@ public class LearnHbaseApi {
 	 */
 	@Test
 	public void testScan(){
-		Scan scan = new Scan(Bytes.toBytes("1000"), Bytes.toBytes("1110"));
+		Scan scan = new Scan(Bytes.toBytes("100000"), Bytes.toBytes("100001"));
 		ResultScanner scanner = null;
 		try {
 			scan.setBatch(2);  //colum 
@@ -139,6 +152,7 @@ public class LearnHbaseApi {
 			 scanner = table.getScanner(scan);
 			for(Result r:scanner){
 			Cell[] rawCells = r.rawCells();
+			System.out.println(rawCells.length+"this is long");
 			for(Cell c : rawCells){
 				System.out.println(new String(CellUtil.cloneValue(c)));
 			}

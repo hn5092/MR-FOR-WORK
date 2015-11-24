@@ -1,6 +1,7 @@
 package xym.test.cc_auto;
 
 import java.io.IOException;
+import java.net.URI;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -13,6 +14,7 @@ import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.Mapper;
 import org.apache.hadoop.mapreduce.Reducer;
+import org.apache.hadoop.mapreduce.filecache.DistributedCache;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 
@@ -23,7 +25,8 @@ public class MR {
 		Configuration conf = new Configuration();
 		Job job = Job.getInstance(conf);
 		job.setJarByClass(MR.class);
-
+//		DistributedCache.addCacheFile(new URI(uriWithLink), conf);
+//		job.addCacheArchive(uri);
 		job.setMapperClass(StepMapper.class);
 		job.setMapOutputKeyClass(Text.class);
 		job.setMapOutputValueClass(Text.class);
@@ -43,6 +46,12 @@ public class MR {
 		Text k2 = new Text();
 		Text v2 = new Text();
 		BeanInfo b = null;
+		@Override
+		protected void setup(
+				Mapper<LongWritable, Text, Text, Text>.Context context)
+				throws IOException, InterruptedException {
+//			URI[] cacheFiles = context.get
+		}
 		@Override
 		protected void map(LongWritable key, Text value, Context context)
 				throws IOException, InterruptedException {
