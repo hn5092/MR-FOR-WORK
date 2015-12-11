@@ -44,7 +44,7 @@ public class LearnHbaseApi {
 		conf.set("hbase.zookeeper.quorum",
 				"xym01:2181,xym02:2181,xym03:2181");
 		try {
-			table = new HTable(conf, "auto");
+			table = new HTable(conf, "test8");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -53,7 +53,18 @@ public class LearnHbaseApi {
 	}
 	
 	
-	
+	@Test
+	public void testPut(){
+		Put put = new Put(Bytes.toBytes("a"));
+		put.add(INFO, Bytes.toBytes("test"), Bytes.toBytes("1111"));
+		try {
+			table.put(put);
+			table.flushCommits();
+		} catch (RetriesExhaustedWithDetailsException | InterruptedIOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	@Test
 	public void test1() throws RetriesExhaustedWithDetailsException, InterruptedIOException{
 		table.setAutoFlushTo(false);//取消自动推送

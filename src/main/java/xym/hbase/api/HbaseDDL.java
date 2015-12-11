@@ -76,7 +76,7 @@ public class HbaseDDL {
 	public void testRegion() {
 		try {
 			HBaseAdmin ha = new HBaseAdmin(conf);
-			String tableName = "test";
+			String tableName = "test9";
 			HTableDescriptor htd = new HTableDescriptor(
 					TableName.valueOf(tableName));
 			HColumnDescriptor hcDescriptor = new HColumnDescriptor("info");
@@ -142,7 +142,7 @@ public class HbaseDDL {
 	public void testAsyncTable3() {
 		try {
 			HBaseAdmin ha = new HBaseAdmin(conf);
-			String tableName = "test3";
+			String tableName = "test1";
 			HTableDescriptor htd = new HTableDescriptor(
 					TableName.valueOf(tableName));
 			HColumnDescriptor hcDescriptor = new HColumnDescriptor("info");

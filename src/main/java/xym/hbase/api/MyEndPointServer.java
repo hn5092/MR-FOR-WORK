@@ -4,6 +4,6 @@ package xym.hbase.api;
  * @author imad
  *
  */
-public class MyEndPointServer extends ba{
+public class MyEndPointServer  {
 	
 }	

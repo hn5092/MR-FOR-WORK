@@ -26,6 +26,7 @@ import org.apache.hadoop.hbase.filter.KeyOnlyFilter;
 import org.apache.hadoop.hbase.filter.PageFilter;
 import org.apache.hadoop.hbase.filter.PrefixFilter;
 import org.apache.hadoop.hbase.filter.QualifierFilter;
+import org.apache.hadoop.hbase.filter.RegexStringComparator;
 import org.apache.hadoop.hbase.filter.RowFilter;
 import org.apache.hadoop.hbase.filter.SingleColumnValueFilter;
 import org.apache.hadoop.hbase.filter.SubstringComparator;
@@ -68,7 +69,7 @@ public class HbaseFitAPI {
 
 		scan.addColumn(INFO, SCREEN);
 		Filter filter = new RowFilter(CompareOp.LESS_OR_EQUAL,
-				new BinaryComparator(Bytes.toBytes("1010")));
+				new RegexStringComparator(""));
 		// Filter filter = new RowFilter(CompareFilter.CompareOp.EQUAL,new
 		// RegexStringComparator(""))
 		scan.setFilter(filter);

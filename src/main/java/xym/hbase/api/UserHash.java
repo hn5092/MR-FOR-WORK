@@ -11,7 +11,5 @@ public class UserHash {
 		System.out.println(hashCode);
 		short shortValue = hashCode.shortValue();
 		System.out.println(shortValue);
-		
-		
 	}
 }
