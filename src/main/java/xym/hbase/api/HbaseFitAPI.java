@@ -252,13 +252,13 @@ public class HbaseFitAPI {
 		getres();
 	}
 	
-	@Test
-	public void testMyFilter(){
-//		scan.addColumn(INFO, SCREEN);
-		Filter myFilter = new org.apache.hadoop.hbase.filter.MyFilter();
-		scan.setFilter(myFilter);
-		getres();
-	}
+//	@Test
+//	public void testMyFilter(){
+////		scan.addColumn(INFO, SCREEN);
+//		Filter myFilter = new org.apache.hadoop.hbase.filter.MyFilter();
+//		scan.setFilter(myFilter);
+//		getres();
+//	}
 	
 	
 	public void getres() {
