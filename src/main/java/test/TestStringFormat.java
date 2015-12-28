@@ -22,6 +22,8 @@ public static void main(String[] args) {
 	 */
 	System.out.println(String.format("%s is %s ", "1","2"));
 	System.out.println(String.format("%n is %n ", 1,2));
+	String i = "11111";
+	System.out.println(i.hashCode());
 
 }
 }

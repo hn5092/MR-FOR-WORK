@@ -15,6 +15,7 @@ import com.google.common.base.Objects;
 import com.google.common.collect.BoundType;
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.HashMultiset;
+import com.google.common.collect.Iterables;
 import com.google.common.collect.MinMaxPriorityQueue;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Multiset;
@@ -44,6 +45,13 @@ public class TestGoogle {
 		MinMaxPriorityQueue<Integer> create2 = MinMaxPriorityQueue.create(i);
 		System.out.println("-----------------------------");
 		System.out.println(create2.peekFirst());
+		
+		System.out.println(create2);
+		Iterable<Integer> concat = Iterables.concat(create2);
+		Integer first = Iterables.getFirst(concat, 10);
+		Integer last = Iterables.getLast(concat);
+		System.out.println(" this is the first value : " + first);
+		System.out.println(" this is the last value : " + last);
 	}
 
 	@Test
@@ -69,7 +77,10 @@ public class TestGoogle {
 				BoundType.CLOSED, 10, BoundType.OPEN);
 		System.out.println(subMultiset);
 	}
-
+	/**
+	 * 统计每个值得个数 遇到相同的是叠加的
+	 * {1=[10, 12, 13, 14], 2=[120], 3=[140], 5=[150], 6=[110], 7=[106]}
+	 */
 	@Test
 	public void testMultimap() {
 		TreeMultimap<Integer, String> create = TreeMultimap.create();
@@ -90,7 +101,9 @@ public class TestGoogle {
 			System.out.println(s);
 		}
 	}
-
+	/**
+	 * table 行 列 值
+	 */
 	@Test
 	public void testTable(){
 		Table<Integer, Integer, Integer> weightedGraph = HashBasedTable.create();
@@ -99,6 +112,7 @@ public class TestGoogle {
 		weightedGraph.put(2, 3, 5);
 		Map<Integer, Integer> row = weightedGraph.row(1); // returns a Map mapping v2 to 4, v3 to 20
 		Map<Integer, Integer> column = weightedGraph.column(3); // returns a Map mapping v1 to 20, v2 to 5
+		System.out.println(weightedGraph);
 	}
 	@Test
 	public void testHash(){
