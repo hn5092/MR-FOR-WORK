@@ -157,6 +157,7 @@ public class MultiInputIPCount {
 
 	@Test
 	public void test() {
+		System.load("ss");
 		keyTuple k1 = new keyTuple("61.134.102.230",
 				"353e3d477d7ecaeb089532b4ed4b005d");
 		keyTuple k2 = new keyTuple("61.134.102.230",

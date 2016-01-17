@@ -1,6 +1,7 @@
 package com.x.hbase;
 
 import java.io.IOException;
+import java.util.Objects;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.HBaseConfiguration;
@@ -75,14 +76,16 @@ public class HBaseDemo {
 	
 	//create table
 	public static void main(String[] args) throws MasterNotRunningException, ZooKeeperConnectionException, IOException {
-		Configuration 	conf=HBaseConfiguration.create();
-		conf.set("hbase.zookeeper.quorum","xym04:2181,xym05:2181,xym02:2181");
-		HBaseAdmin admin=new HBaseAdmin(conf);
-		HTableDescriptor htd=new HTableDescriptor(TableName.valueOf("auto"));
-		HColumnDescriptor hcDescriptor=new HColumnDescriptor("info");
-		hcDescriptor.setMaxVersions(1);
-		htd.addFamily(hcDescriptor);
-		admin.createTable(htd);
-		admin.close();
+//		Configuration 	conf=HBaseConfiguration.create();
+//		conf.set("hbase.zookeeper.quorum","xym04:2181,xym05:2181,xym02:2181");
+//		HBaseAdmin admin=new HBaseAdmin(conf);
+//		HTableDescriptor htd=new HTableDescriptor(TableName.valueOf("auto"));
+//		HColumnDescriptor hcDescriptor=new HColumnDescriptor("info");
+//		hcDescriptor.setMaxVersions(1);
+//		htd.addFamily(hcDescriptor);
+//		admin.createTable(htd);
+//		admin.close();
+		int hashCode = Objects.hash("sssssssssssddddddddasdsad1231231231231asdasd41sdsavzxddddssss");
+		System.out.println(hashCode);
 	}
 }

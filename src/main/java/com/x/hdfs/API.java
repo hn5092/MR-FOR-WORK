@@ -1,6 +1,8 @@
 package com.x.hdfs;
 
 import java.io.IOException;
+import java.nio.channels.FileChannel;
+import java.nio.file.StandardOpenOption;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FSDataInputStream;
@@ -27,8 +29,10 @@ public class API {
 
 		try {
 			 fileSystem = FileSystem.get(configuration);
-			FSDataInputStream open = fileSystem.open(new Path(
-					"/T_EXP_OP_RECORD_TRUCK/T_EXP_OP_RECORD_TRUCK_20151209"));
+			Path f = new Path(
+					"/T_EXP_OP_RECORD_TRUCK/T_EXP_OP_RECORD_TRUCK_20151209");
+			FSDataInputStream open = fileSystem.open(f);
+			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

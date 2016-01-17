@@ -45,6 +45,6 @@ public class HttpResponse {
 	@Test
 	public void testBuild() {
 		HttpResponse httpResponse = HttpResponse.Builder.newBuilder().responseCode(200).body("response").build();
-		
+		 
 	}
 }

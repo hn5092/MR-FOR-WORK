@@ -52,7 +52,8 @@ public class HbaseFitAPI {
 		Configuration conf = HBaseConfiguration.create();
 		conf.set("hbase.zookeeper.quorum", "xym01:2181,xym02:2181,xym03:2181");
 		try {
-			scan = new Scan(Bytes.toBytes("163874"), Bytes.toBytes("164874"));
+//			scan = new Scan(Bytes.toBytes("1"), Bytes.toBytes("10000000"));
+			scan = new Scan();
 			table = new HTable(conf, "auto");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -68,11 +69,12 @@ public class HbaseFitAPI {
 	public void testRowFilter() {
 
 		scan.addColumn(INFO, SCREEN);
-		Filter filter = new RowFilter(CompareOp.LESS_OR_EQUAL,
-				new RegexStringComparator(""));
+//		Filter filter = new RowFilter(CompareOp.GREATER_OR_EQUAL,
+//				new BinaryComparator(Bytes.toBytes("317932")));
+		PrefixFilter prefixFilter = new PrefixFilter(Bytes.toBytes("31793"));
 		// Filter filter = new RowFilter(CompareFilter.CompareOp.EQUAL,new
 		// RegexStringComparator(""))
-		scan.setFilter(filter);
+		scan.setFilter(prefixFilter);
 		try {
 			ResultScanner scanner = table.getScanner(scan);
 			for (Result res : scanner) {
@@ -241,9 +243,10 @@ public class HbaseFitAPI {
 	}
 	/**
 	 * 根据时间查找
+	 * @throws IOException 
 	 */
 	@Test
-	public void Time(){
+	public void Time() throws IOException{
 		List<Long> ls = new ArrayList<Long>();
 		ls.add(1446775297235L);
 //		TimestampsFilter tf = new TimestampsFilter(ls);

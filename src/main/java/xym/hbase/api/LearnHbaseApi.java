@@ -31,6 +31,8 @@ import org.junit.Test;
 public class LearnHbaseApi {
 	private static final Log LOG = LogFactory.getLog(LearnHbaseApi.class);
 	private static final byte[] INFO = Bytes.toBytes("info");
+	private static final byte[] DATA = Bytes.toBytes("data");
+
 	private static final byte[] URL = Bytes.toBytes("URL");
 	private static final byte[] ROW1 = Bytes.toBytes("1111");
 	private static final byte[] ROW2 = Bytes.toBytes("2222");
@@ -56,8 +58,12 @@ public class LearnHbaseApi {
 	@Test
 	public void testPut(){
 		Put put = new Put(Bytes.toBytes("a"));
-		put.add(INFO, Bytes.toBytes("test"), Bytes.toBytes("1111"));
+//		put.add(INFO, Bytes.toBytes("test"), Bytes.toBytes("2222"));
+//		put.add(DATA, Bytes.toBytes("test"), Bytes.toBytes("123"));
+		put.add(DATA, Bytes.toBytes("test3"), Bytes.toBytes("123"));
+
 		try {
+			
 			table.put(put);
 			table.flushCommits();
 		} catch (RetriesExhaustedWithDetailsException | InterruptedIOException e) {
@@ -111,12 +117,12 @@ public class LearnHbaseApi {
 	}
 	@Test
 	public void testGet(){
-		Get get = new Get(Bytes.toBytes("100"));
+		Get get = new Get(Bytes.toBytes("a"));
 		Result result;
 		try {
 			result = table.get(get);
 			for(Cell c:result.rawCells()){
-				System.out.println(new String(CellUtil.cloneValue(c)));
+				System.out.println(new String(CellUtil.cloneValue(c)) +" :"+ new String(CellUtil.cloneQualifier(c)) + ":" + new String(CellUtil.cloneFamily(c)));
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
