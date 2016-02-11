@@ -12,6 +12,7 @@ import java.lang.invoke.MethodType;
 public class MethodHandleTest {
   static class ClassA {
     public void println(String s) {
+    	
     }
   }
 
