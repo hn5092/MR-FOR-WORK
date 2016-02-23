@@ -104,6 +104,20 @@
 			<version>2.10.4</version>
 			<scope>compile</scope>
 		</dependency>
+		<!-- ssh包 -->
+		<dependency>
+			<groupId>sshtools</groupId>
+			<artifactId>j2ssh-core</artifactId>
+			<version>0.2.9</version>
+		</dependency>
+		<!-- ssh获取文件到本地 -->
+		<dependency>
+			<groupId>ch.ethz.ganymed</groupId>
+			<artifactId>ganymed-ssh2</artifactId>
+			<version>262</version>
+		</dependency>
+
+
 	</dependencies>
 	<build>
 
