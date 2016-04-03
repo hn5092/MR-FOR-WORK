@@ -5,7 +5,6 @@ import java.util.TreeMap;
 public class TreeMapTest {
 	public static void main(String[] args) {
 		TreeMap<Integer, String> t = new TreeMap<Integer, String>();
-		
 		t.put(1, "2");
 		t.put(2,"3");
 		t.put(0,"3");

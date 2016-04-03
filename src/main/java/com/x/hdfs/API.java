@@ -6,14 +6,17 @@ import java.nio.file.StandardOpenOption;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FSDataInputStream;
+import org.apache.hadoop.fs.FileStatus;
 import org.apache.hadoop.fs.FileSystem;
+import org.apache.hadoop.fs.FsStatus;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.util.RunJar;
+import org.junit.Before;
 import org.junit.Test;
 
 public class API {
 	FileSystem fileSystem;
-	@Test
+	@Before
 	public void testGet() {
 		Configuration configuration = new Configuration();
 		configuration.set("fs.defaultFS", "hdfs://ytocluster");
@@ -29,9 +32,9 @@ public class API {
 
 		try {
 			 fileSystem = FileSystem.get(configuration);
-			Path f = new Path(
-					"/T_EXP_OP_RECORD_TRUCK/T_EXP_OP_RECORD_TRUCK_20151209");
-			FSDataInputStream open = fileSystem.open(f);
+//			Path f = new Path(
+//					"/T_EXP_OP_RECORD_TRUCK/T_EXP_OP_RECORD_TRUCK_20151209");
+//			FSDataInputStream open = fileSystem.open(f);
 			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -43,6 +46,21 @@ public class API {
 	public void testDel() throws IllegalArgumentException, IOException{
 		boolean flag = fileSystem.delete(new Path("/test/xym/hadoop/1"), true);
 		System.out.println(flag);
+	}
+	
+	
+	@Test
+	public void testFind() throws IllegalArgumentException, IOException{
+		FsStatus status = fileSystem.getStatus(new Path("/user/hive/warehouse/filter/cleaned/t_stl_exp_transfer_bak/"));
+		FileStatus[] fileStatus = fileSystem.listStatus(new Path("/user/hive/warehouse/filter/cleaned/t_stl_exp_transfer_bak/"));
+		for(FileStatus f:fileStatus){
+			System.out.println(f.getPath());
+		}
+		 fileStatus = fileSystem.listStatus(new Path("/user/hive/warehouse/filter/cleaned/t_stl_exp_transfer_bak/result"));
+		 
+		for(FileStatus f:fileStatus){
+			System.out.println(f.getPath());
+		}
 	}
 //	@Test
 //	public void testGet() {
